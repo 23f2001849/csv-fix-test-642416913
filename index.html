@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Price Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Total price of products:</h1>
+        <h2 id="total"></h2>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            fetch('products.csv')
+            .then(response => response.text())
+            .then(data => {
+                let csvData = data.split('\n').slice(1);
+                let total = 0;
+                csvData.forEach(row => {
+                    let columns = row.split(',');
+                    if(columns.length === 2) {
+                        let price = parseFloat(columns[1]);
+                        if(!isNaN(price)) {
+                            total += price;
+                        }
+                    }
+                });
+                document.getElementById('total').innerText = '$' + total.toFixed(2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('total').innerText = 'Error loading data';
+            });
+        };
+    </script>
+</body>
+</html>
